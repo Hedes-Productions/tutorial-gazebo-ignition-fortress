@@ -1,51 +1,61 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
-    
-    <model name='vehicle_blue' canonical_link='chassis'>
+
+    <!-- Differential drive robot model -->
+    <model name='robot' canonical_link='chassis'>
+
+        <!-- Initial pose of the model: x=0, y=0, z=0, roll=0, pitch=0, yaw=0 -->
         <pose>0 0 0 0 0 0</pose>
 
-        <!-- Chassis link mass -->
+        <!-- ===================== Chassis ===================== -->
         <link name='chassis'>
-            <pose relative_to='__model__'>0.5 0 0.4 0 0 0</pose> <!-- Pose of the link x,y,z,roll,pitch,yaw -->
-        <!--Inertial properties of the link mass, inertia matix-->
-        <inertial> 
-            <mass>1.14395</mass>
-            <inertia>
-                <ixx>0.095329</ixx>
-                <ixy>0</ixy>
-                <ixz>0</ixz>
-                <iyy>0.381317</iyy>
-                <iyz>0</iyz>
-                <izz>0.476646</izz>
-            </inertia>
-        </inertial>
-        <!--Visual properties of the link mass -->
-        <visual name='chassis_visual'> 
-            <geometry>
-                <box>
-                    <size>2.0 1.0 0.5</size>
-                </box>
-            </geometry>
-            <!--Adding material - that means we are adding properties of the color -->
-            <material>
-                <ambient>0.0 0.0 1.0 1</ambient>
-                <diffuse>0.0 0.0 1.0 1</diffuse>
-                <specular>0.0 0.0 1.0 1</specular>
-            </material>
-        </visual>
-        <!--Adding collision to the link mass -->
-        <collision name='chassis_collision'>
-            <geometry>
-                <box>
-                    <size>2.0 1.0 0.5</size>
-                </box>
-            </geometry>
-        </collision>
+            <!-- Pose of chassis link relative to the model frame -->
+            <pose relative_to='__model__'>0.5 0 0.4 0 0 0</pose> 
+
+            <!-- Inertial properties: mass and inertia matrix -->
+            <inertial> 
+                <mass>1.14395</mass>
+                <inertia>
+                    <ixx>0.095329</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.381317</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.476646</izz>
+                </inertia>
+            </inertial>
+
+            <!-- Visual appearance of the chassis -->
+            <visual name='chassis_visual'> 
+                <geometry>
+                    <box>
+                        <size>2.0 1.0 0.5</size>
+                    </box>
+                </geometry>
+                <!-- Material (color and shininess) -->
+                <material>
+                    <ambient>0.0 1.0 1.0 0.8</ambient>
+                    <diffuse>0.0 0.5 1.0 0.975</diffuse>
+                    <specular>0 0 0 0</specular>
+                </material>
+            </visual>
+
+            <!-- Collision geometry of the chassis -->
+            <collision name='chassis_collision'>
+                <geometry>
+                    <box>
+                        <size>2.0 1.0 0.5</size>
+                    </box>
+                </geometry>
+            </collision>
         </link>
 
-        <!-- Left wheel link mass -->
+        <!-- ===================== Left Wheel ===================== -->
         <link name='left_wheel'>
-            <pose relative_to="chassis">-0.5 0.6 0 -1.5707 0 0</pose> <!-- Relative pose of the left wheel link mass to the chassis link mass x,y,z,roll,pitch,yaw -->
+            <!-- Pose of left wheel relative to the chassis -->
+            <pose relative_to="chassis">-0.5 0.6 0 -1.5707 0 0</pose>
+
+            <!-- Inertial properties -->
             <inertial>
                 <mass>1</mass>
                 <inertia>
@@ -57,6 +67,8 @@
                     <izz>0.08</izz>
                 </inertia>
             </inertial>
+
+            <!-- Visual appearance -->
             <visual name='left_wheel_visual'>
                 <geometry>
                     <cylinder>
@@ -65,11 +77,13 @@
                     </cylinder>
                 </geometry>
                 <material>
-                    <ambient>1.0 0.0 0.0 1</ambient>
-                    <diffuse>1.0 0.0 0.0 1</diffuse>
-                    <specular>1.0 0.0 0.0 1</specular>
+                    <ambient>1.0 1.0 1.0 1</ambient>
+                    <diffuse>0.05 0.05 0.05 1</diffuse>
+                    <specular>1 1 1 1</specular>
                 </material>
             </visual>
+
+            <!-- Collision geometry -->
             <collision name='left_wheel_collision'>
                 <geometry>
                     <cylinder>
@@ -80,9 +94,12 @@
             </collision>
         </link>
 
-        <!-- Right wheel link mass -->
+        <!-- ===================== Right Wheel ===================== -->
         <link name='right_wheel'>
+            <!-- Pose of right wheel relative to the chassis -->
             <pose relative_to="chassis">-0.5 -0.6 0 -1.5707 0 0</pose>
+
+            <!-- Inertial properties -->
             <inertial>
                 <mass>1</mass>
                 <inertia>
@@ -94,6 +111,8 @@
                     <izz>0.08</izz>
                 </inertia>
             </inertial>
+
+            <!-- Visual appearance -->
             <visual name='right_wheel_visual'>
                 <geometry>
                     <cylinder>
@@ -102,11 +121,13 @@
                     </cylinder>
                 </geometry>
                 <material>
-                    <ambient>1.0 0.0 0.0 1</ambient>
-                    <diffuse>1.0 0.0 0.0 1</diffuse>
-                    <specular>1.0 0.0 0.0 1</specular>
+                    <ambient>1.0 1.0 1.0 1</ambient>
+                    <diffuse>0.05 0.05 0.05 1</diffuse>
+                    <specular>1 1 1 1</specular>
                 </material>
             </visual>
+
+            <!-- Collision geometry -->
             <collision name='right_wheel_collision'>
                 <geometry>
                     <cylinder>
@@ -117,14 +138,17 @@
             </collision>
         </link>
 
-        <!-- Add a arbitary frame to attach the caster wheel -->
+        <!-- ===================== Caster Wheel ===================== -->
+        <!-- Frame to position the caster wheel -->
         <frame name="caster_frame" attached_to='chassis'>
             <pose>0.8 0 -0.2 0 0 0</pose>
         </frame>
 
-        <!-- Caster wheel link mass -->
         <link name='caster'>
+            <!-- Pose relative to caster frame -->
             <pose relative_to='caster_frame'/>
+            
+            <!-- Inertial properties -->
             <inertial>
                 <mass>1</mass>
                 <inertia>
@@ -136,6 +160,8 @@
                     <izz>0.016</izz>
                 </inertia>
             </inertial>
+
+            <!-- Visual appearance -->
             <visual name='visual'>
                 <geometry>
                     <sphere>
@@ -143,11 +169,13 @@
                     </sphere>
                 </geometry>
                 <material>
-                    <ambient>0.0 1 0.0 1</ambient>
-                    <diffuse>0.0 1 0.0 1</diffuse>
-                    <specular>0.0 1 0.0 1</specular>
+                    <ambient>1.0 0.0 0.0 1</ambient>
+                    <diffuse>1 0 0 1</diffuse>
+                    <specular>0 0 0 0</specular>
                 </material>
             </visual>
+
+            <!-- Collision geometry -->
             <collision name='collision'>
                 <geometry>
                     <sphere>
@@ -157,52 +185,7 @@
             </collision>
         </link>
 
-        <!-- Joint for the left wheel - its joint type is revolute -->
-        <joint name='left_wheel_joint' type='revolute'>
-            <pose relative_to='left_wheel'/>
-            <parent>chassis</parent> <!--Parent of the joint -->
-            <child>left_wheel</child> <!--Children of the joint -->
-            <axis>
-                <xyz expressed_in='__model__'>0 1 0</xyz>
-                <!-- Setting limits for the rotation -->
-                <limit>
-                    <lower>-1.79769e+308</lower>    <!--negative infinity-->
-                    <upper>1.79769e+308</upper>     <!--positive infinity-->
-                </limit>
-            </axis>
-        </joint>
-
-        <!-- Joint for the right wheel - its joint type is revolute -->
-        <joint name='right_wheel_joint' type='revolute'>
-            <pose relative_to='right_wheel'/>
-            <parent>chassis</parent>
-            <child>right_wheel</child>
-            <axis>
-                <xyz expressed_in='__model__'>0 1 0</xyz>
-                <limit>
-                    <lower>-1.79769e+308</lower>    <!--negative infinity-->
-                    <upper>1.79769e+308</upper>     <!--positive infinity-->
-                </limit>
-            </axis>
-        </joint>
-
-        <!-- Joint for the caster wheel - its joint type is ball -->
-        <joint name='caster_wheel' type='ball'>
-            <parent>chassis</parent>
-            <child>caster</child>
-            <!-- No neeed of limits and axis because its a ball joint -->
-        </joint>
-
-        <plugin
-            filename="libignition-gazebo-diff-drive-system.so"
-            name="ignition::gazebo::systems::DiffDrive">
-            <left_joint>left_wheel_joint</left_joint>
-            <right_joint>right_wheel_joint</right_joint>
-            <wheel_separation>1.2</wheel_separation>
-            <wheel_radius>0.4</wheel_radius>
-            <odom_publish_frequency>1</odom_publish_frequency>
-            <topic>cmd_vel</topic>
-        </plugin>
+        
 
     </model>
 </sdf>

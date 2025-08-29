@@ -1,66 +1,83 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" ?> <!-- xml declaration -->
+<!-- SDF version -->
 <sdf version="1.8">
-    <world name="car_world">
+    <!-- The world file that includes the diff drive robot model -->
+    <world name="robot_world">
+        <!-- Set the physics engine parameters -->
         <physics name="1ms" type="ignored">
-            <max_step_size>0.001</max_step_size>
-            <real_time_factor>1.0</real_time_factor>
+            <max_step_size>0.001</max_step_size> <!-- 1ms -->
+            <real_time_factor>1.0</real_time_factor> <!-- run in real time -->
         </physics>
+        <!-- Physics plugin: runs the physics engine (gravity, collisions, dynamics) -->
         <plugin
             filename="libignition-gazebo-physics-system.so"
             name="ignition::gazebo::systems::Physics">
         </plugin>
+
+        <!-- User commands plugin: allows inserting, deleting, or moving models in the simulation -->
         <plugin
             filename="libignition-gazebo-user-commands-system.so"
             name="ignition::gazebo::systems::UserCommands">
         </plugin>
+
+        <!-- Scene broadcaster plugin: streams world state to the GUI for 3D visualization -->
         <plugin
             filename="libignition-gazebo-scene-broadcaster-system.so"
             name="ignition::gazebo::systems::SceneBroadcaster">
         </plugin>
 
+
+        <!-- Light source in the world -->
         <light type="directional" name="sun">
-            <cast_shadows>true</cast_shadows>
-            <pose>0 0 10 0 0 0</pose>
-            <diffuse>0.8 0.8 0.8 1</diffuse>
-            <specular>0.2 0.2 0.2 1</specular>
+            <cast_shadows>true</cast_shadows> <!-- enable shadows -->
+            <pose>0 0 10 0 0 0</pose> <!-- position and orientation of the light -->
+            <diffuse>0.8 0.8 0.8 1</diffuse> <!-- color of the light -->
+            <specular>0.2 0.2 0.2 1</specular> <!-- highlight color -->
             <attenuation>
-                <range>1000</range>
-                <constant>0.9</constant>
-                <linear>0.01</linear>
-                <quadratic>0.001</quadratic>
+                <range>1000</range> <!-- effective range of the light -->
+                <constant>0.9</constant> <!-- constant attenuation factor -->
+                <linear>0.01</linear> <!-- linear attenuation factor -->
+                <quadratic>0.001</quadratic> <!-- quadratic attenuation factor -->
             </attenuation>
-            <direction>-0.5 0.1 -0.9</direction>
+            <direction>-0.5 0.1 -0.9</direction> <!-- direction of the light rays -->
         </light>
 
+        <!-- Ground plane model -->
         <model name="ground_plane">
-            <static>true</static>
+            <static>true</static> <!-- ground plane is static -->
+            <!-- Link for the ground plane -->
             <link name="link">
+                <!-- collision properties -->
                 <collision name="collision">
-                <geometry>
-                    <plane>
-                    <normal>0 0 1</normal>
-                    </plane>
-                </geometry>
+                    <!-- Geometry of the ground plane -->
+                    <geometry>
+                        <plane>
+                        <normal>0 0 1</normal> <!-- normal vector pointing up -->
+                        <size>100 100</size> <!-- size of the ground plane -->
+                        </plane>
+                    </geometry>
                 </collision>
+                <!-- Visual properties of the ground plane -->
                 <visual name="visual">
-                <geometry>
-                    <plane>
-                    <normal>0 0 1</normal>
-                    <size>100 100</size>
-                    </plane>
-                </geometry>
-                <material>
-                    <ambient>0.8 0.8 0.8 1</ambient>
-                    <diffuse>0.8 0.8 0.8 1</diffuse>
-                    <specular>0.8 0.8 0.8 1</specular>
-                </material>
+                    <geometry>
+                        <plane>
+                            <normal>0 0 1</normal>
+                            <size>100 100</size>
+                        </plane>
+                    </geometry>
+                    <!-- Material properties for the ground plane -->
+                    <material>
+                        <ambient>0.8 0.8 0.8 1</ambient>
+                        <diffuse>0.8 0.8 0.8 1</diffuse>
+                        <specular>0.8 0.8 0.8 1</specular>
+                    </material>
                 </visual>
             </link>
         </model>
 
+        <!-- Include the diff drive robot model -->
         <include>
             <uri>file://diff-robot.sdf</uri>
-            <pose>0 0 0.1 0 0 0</pose>
         </include>
 
     </world>
