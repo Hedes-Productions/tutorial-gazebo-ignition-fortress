@@ -31,11 +31,11 @@
         <light type="directional" name="sun">
             <cast_shadows>true</cast_shadows> <!-- enable shadows -->
             <pose>0 0 10 0 0 0</pose> <!-- position and orientation of the light -->
-            <diffuse>0.8 0.8 0.8 1</diffuse> <!-- color of the light -->
+            <diffuse>0.6 0.6 0.6 1</diffuse> <!-- color of the light -->
             <specular>0.2 0.2 0.2 1</specular> <!-- highlight color -->
             <attenuation>
                 <range>1000</range> <!-- effective range of the light -->
-                <constant>0.9</constant> <!-- constant attenuation factor -->
+                <constant>0.5</constant> <!-- constant attenuation factor -->
                 <linear>0.01</linear> <!-- linear attenuation factor -->
                 <quadratic>0.001</quadratic> <!-- quadratic attenuation factor -->
             </attenuation>
@@ -67,17 +67,23 @@
                     </geometry>
                     <!-- Material properties for the ground plane -->
                     <material>
-                        <ambient>0.8 0.8 0.8 1</ambient>
-                        <diffuse>0.8 0.8 0.8 1</diffuse>
-                        <specular>0.8 0.8 0.8 1</specular>
+                        <ambient>1 1 1 1</ambient>
+                        <diffuse>1 1 1 1</diffuse>
+                        <specular>1 1 1 1</specular>
                     </material>
                 </visual>
             </link>
         </model>
 
-        <!-- Include the diff drive robot model -->
+        <!-- Include the diff drive robot model
         <include>
             <uri>file://diff-robot.sdf</uri>
+        </include> -->
+
+        <include>
+            <uri>
+            https://fuel.gazebosim.org/1.0/ALIARAB/models/ur5_rg2
+            </uri>
         </include>
 
     </world>

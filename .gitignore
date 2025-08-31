@@ -1,2 +1,5 @@
 code-images
 tutorial-steps.sdf
+simulation-images
+.gitinore
+go2pos_env

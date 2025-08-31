@@ -9,10 +9,8 @@
 
         <!-- ===================== Chassis ===================== -->
         <link name='chassis'>
-            <!-- Pose of chassis link relative to the model frame -->
             <pose relative_to='__model__'>0.5 0 0.4 0 0 0</pose> 
 
-            <!-- Inertial properties: mass and inertia matrix -->
             <inertial> 
                 <mass>1.14395</mass>
                 <inertia>
@@ -25,14 +23,12 @@
                 </inertia>
             </inertial>
 
-            <!-- Visual appearance of the chassis -->
             <visual name='chassis_visual'> 
                 <geometry>
                     <box>
                         <size>2.0 1.0 0.5</size>
                     </box>
                 </geometry>
-                <!-- Material (color and shininess) -->
                 <material>
                     <ambient>0.0 1.0 1.0 0.8</ambient>
                     <diffuse>0.0 0.5 1.0 0.975</diffuse>
@@ -40,7 +36,6 @@
                 </material>
             </visual>
 
-            <!-- Collision geometry of the chassis -->
             <collision name='chassis_collision'>
                 <geometry>
                     <box>
@@ -48,8 +43,16 @@
                     </box>
                 </geometry>
             </collision>
-        </link>
 
+            <!-- ===================== IMU Sensor ===================== -->
+            <!-- IMU sensor attached to the chassis link -->
+            <sensor name="imu_sensor" type="imu">
+                <always_on>1</always_on>           <!-- Sensor always active -->
+                <update_rate>50</update_rate>      <!-- Data generated at 50 Hz -->
+                <visualize>true</visualize>        <!-- Visualize in GUI -->
+                <topic>imu</topic>                 <!-- Topic to publish IMU data -->
+            </sensor>
+        </link>
         <!-- ===================== Left Wheel ===================== -->
         <link name='left_wheel'>
             <!-- Pose of left wheel relative to the chassis -->
@@ -185,7 +188,61 @@
             </collision>
         </link>
 
-        
+        <!-- ===================== Joints ===================== -->
+        <!-- Revolute joint: chassis ↔ left wheel -->
+        <joint name='left_wheel_joint' type='revolute'>
+            <pose relative_to='left_wheel'/>
+            <parent>chassis</parent> <!-- Parent link -->
+            <child>left_wheel</child> <!-- Child link -->
+            <axis>
+                <xyz expressed_in='__model__'>0 1 0</xyz>
+                <!-- Rotation limits (effectively ±infinity) -->
+                <limit>
+                    <lower>-1.79769e+308</lower>
+                    <upper>1.79769e+308</upper>
+                </limit>
+            </axis>
+        </joint>
+
+        <!-- Revolute joint: chassis ↔ right wheel -->
+        <joint name='right_wheel_joint' type='revolute'>
+            <pose relative_to='right_wheel'/>
+            <parent>chassis</parent>
+            <child>right_wheel</child>
+            <axis>
+                <xyz expressed_in='__model__'>0 1 0</xyz>
+                <limit>
+                    <lower>-1.79769e+308</lower>
+                    <upper>1.79769e+308</upper>
+                </limit>
+            </axis>
+        </joint>
+
+        <!-- Ball joint: chassis ↔ caster wheel -->
+        <joint name='caster_wheel' type='ball'>
+            <parent>chassis</parent>
+            <child>caster</child>
+            <!-- Ball joints don’t need axis or limits -->
+        </joint>
+
+        <!-- ===================== DiffDrive Plugin ===================== -->
+        <!-- Converts velocity commands (cmd_vel) into wheel motion and publishes odometry -->
+        <plugin
+            filename="libignition-gazebo-diff-drive-system.so"
+            name="ignition::gazebo::systems::DiffDrive">
+            <left_joint>left_wheel_joint</left_joint> <!-- Left wheel joint -->
+            <right_joint>right_wheel_joint</right_joint> <!-- Right wheel joint -->
+            <wheel_separation>1.2</wheel_separation> <!-- Distance between left & right wheels -->
+            <wheel_radius>0.4</wheel_radius> <!-- Radius of wheels -->
+            <odom_publish_frequency>1</odom_publish_frequency> <!-- Odometry publish rate [Hz] -->
+            <topic>cmd_vel</topic> <!-- ROS-like topic for velocity commands -->
+        </plugin>
+
+        <!-- IMU plugin: enables the IMU sensor to publish orientation, angular velocity, and acceleration -->
+        <plugin
+            filename="libignition-gazebo-imu-system.so"
+            name="ignition::gazebo::systems::Imu">
+        </plugin>
 
     </model>
 </sdf>
